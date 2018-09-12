@@ -1,14 +1,21 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+  id 'java'
+  id 'maven'
+  id 'maven-publish'
+}
 
 group = 'org.freeswitch.esl.client'
-version = '0.10.0-SNAPSHOT'
+version = '0.10.1'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-     maven { url "http://repo.maven.apache.org/maven2" }
+    mavenLocal()
+    maven {
+        url "http://10.0.10.204:8081/nexus/content/groups/public"
+    }
+    mavenCentral()
 }
 
 dependencies {
@@ -17,4 +24,29 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
     runtime 'ch.qos.logback:logback-classic:1.2.3'
     testCompile 'junit:junit:4.8.1'
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId 'org.freeswitch.esl.client'
+            artifactId 'esl-client'
+            version '0.10.1'
+
+            from components.java
+            // more goes in here
+           
+        }
+    }
+
+    repositories {
+        maven {
+            url "http://10.0.10.204:8081/nexus/content/repositories/thirdparty/"
+            credentials {
+                username 'admin'
+                password 'admin123'
+            }
+        }
+    }
 }

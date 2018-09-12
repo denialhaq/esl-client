@@ -59,11 +59,16 @@ public class Client implements IModEslApi {
 	private CommandResponse authenticationResponse;
 	private Optional<Context> clientContext = Optional.empty();
 	private ExecutorService callbackExecutor = Executors.newSingleThreadExecutor();
+	private IEslConnectionListener connectionListener = null;
 
 	public void addEventListener(IEslEventListener listener) {
 		if (listener != null) {
 			eventListeners.add(listener);
 		}
+	}
+
+	public void addConnectionListener(IEslConnectionListener listener) {
+		connectionListener = listener;
 	}
 
 	@Override
@@ -324,6 +329,13 @@ public class Client implements IModEslApi {
 			authenticated = response.isOk();
 			authenticationResponse = response;
 			log.debug("Auth response success={}, message=[{}]", authenticated, response.getReplyText());
+			
+			if(null!=connectionListener)
+				try {
+					connectionListener.onauth(authenticated);
+				} catch (Throwable t) {
+					throw Throwables.propagate(t);
+				}
 		}
 
 		@Override
@@ -337,6 +349,12 @@ public class Client implements IModEslApi {
 		@Override
 		public void disconnected() {
 			log.info("Disconnected ...");
+			if(null!=connectionListener)
+				try {
+					connectionListener.ondisconnected();
+				} catch (Throwable t) {
+					throw Throwables.propagate(t);
+				}
 		}
 	};
 }
