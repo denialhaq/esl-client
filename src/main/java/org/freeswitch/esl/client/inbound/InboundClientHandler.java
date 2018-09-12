@@ -77,4 +77,16 @@ class InboundClientHandler extends AbstractEslClientHandler {
 		listener.disconnected();
 	}
 
+	@Override 
+    public void channelActive(ChannelHandlerContext ctx) throws Exception { 
+        log.debug("======channelActive========"); 
+    } 
+
+
+    @Override 
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception { 
+        log.debug("Received channelInactive notice");
+		listener.disconnected();
+    } 
+
 }
