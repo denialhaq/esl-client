@@ -11,9 +11,7 @@ public interface IModEslApi {
 
 	enum EventFormat {
 
-		PLAIN("plain"),
-		XML("xml"),
-		JSON("json");
+		PLAIN("plain"), XML("xml"), JSON("json");
 
 		private final String text;
 
@@ -30,14 +28,8 @@ public interface IModEslApi {
 
 	enum LoggingLevel {
 
-		CONSOLE("console"),
-		DEBUG("debug"),
-		INFO("info"),
-		NOTICE("notice"),
-		WARNING("warning"),
-		ERR("err"),
-		CRIT("crit"),
-		ALERT("alert");
+		CONSOLE("console"), DEBUG("debug"), INFO("info"), NOTICE("notice"), WARNING("warning"), ERR("err"),
+		CRIT("crit"), ALERT("alert");
 
 		private final String text;
 
@@ -59,6 +51,8 @@ public interface IModEslApi {
 	CompletableFuture<EslEvent> sendBackgroundApiCommand(String command, String arg);
 
 	CommandResponse setEventSubscriptions(EventFormat format, String events);
+
+	CommandResponse setEventNoSubscriptions(String events);
 
 	CommandResponse cancelEventSubscriptions();
 

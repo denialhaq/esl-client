@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.freeswitch.esl.client'
-version = '0.10.2'
+version = '0.10.3'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -32,7 +32,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId 'org.freeswitch.esl.client'
             artifactId 'esl-client'
-            version '0.10.2'
+            version '0.10.3'
 
             from components.java
             // more goes in here
