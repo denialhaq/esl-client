@@ -302,6 +302,24 @@ public class Context implements IModEslApi {
 	}
 
 	/**
+	 * Send a {@link SendMsg} command to FreeSWITCH. This client requires that the
+	 * {@link SendMsg} has a call UUID parameter.
+	 *
+	 * @param sendMsg a {@link SendMsg} with call UUID
+	 * @return a {@link CommandResponse} with the server's response.
+	 */
+	@Override
+	public CompletableFuture<EslMessage> sendAsyncMessage(SendMsg sendMsg) {
+
+		checkNotNull(sendMsg, "sendMsg cannot be null");
+		try {
+			return handler.sendApiMultiLineCommand(channel, sendMsg.getMsgLines());
+		} catch (Throwable t) {
+			throw propagate(t);
+		}
+	}
+
+	/**
 	 * Enable log output.
 	 *
 	 * @param level using the same values as in console.conf

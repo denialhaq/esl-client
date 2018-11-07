@@ -295,6 +295,12 @@ public class Client implements IModEslApi {
 		return clientContext.get().sendMessage(sendMsg);
 	}
 
+	@Override
+	public CompletableFuture<EslMessage> sendAsyncMessage(SendMsg sendMsg) {
+		checkConnected();
+		return clientContext.get().sendAsyncMessage(sendMsg);
+	}
+
 	/**
 	 * Enable log output.
 	 *
@@ -362,7 +368,11 @@ public class Client implements IModEslApi {
 		public void eventReceived(final Context ctx, final EslEvent event) {
 			log.debug("Event received [{}]", event);
 			for (final IEslEventListener listener : eventListeners) {
-				callbackExecutor.execute(() -> listener.onEslEvent(ctx, event));
+				if (null == callbackExecutor) {
+					listener.onEslEvent(ctx, event);
+				} else {
+					callbackExecutor.execute(() -> listener.onEslEvent(ctx, event));
+				}
 			}
 		}
 

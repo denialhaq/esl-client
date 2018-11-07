@@ -62,6 +62,8 @@ public interface IModEslApi {
 
 	CommandResponse sendMessage(SendMsg sendMsg);
 
+	CompletableFuture<EslMessage> sendAsyncMessage(SendMsg sendMsg);
+
 	CommandResponse setLoggingLevel(LoggingLevel level);
 
 	CommandResponse cancelLogging();
