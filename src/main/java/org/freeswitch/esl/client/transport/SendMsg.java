@@ -23,8 +23,8 @@ public class SendMsg {
 	private final boolean hasUuid;
 
 	/**
-	 * Constructor for use with outbound socket client only.  This client mode does not need a call
-	 * UUID for context.
+	 * Constructor for use with outbound socket client only. This client mode does
+	 * not need a call UUID for context.
 	 */
 	public SendMsg() {
 		msgLines.add("sendmsg");
@@ -34,7 +34,8 @@ public class SendMsg {
 	/**
 	 * Constructor for use with the inbound client.
 	 *
-	 * @param uuid of the call to send message to (it should be in 'park' to be operated on).
+	 * @param uuid of the call to send message to (it should be in 'park' to be
+	 *             operated on).
 	 */
 	public SendMsg(String uuid) {
 		msgLines.add("sendmsg " + uuid);
@@ -43,6 +44,7 @@ public class SendMsg {
 
 	/**
 	 * Adds the following line to the message:
+	 * 
 	 * <pre>
 	 *   call-command: command
 	 * </pre>
@@ -56,6 +58,7 @@ public class SendMsg {
 
 	/**
 	 * Adds the following line to the message:
+	 * 
 	 * <pre>
 	 *   execute-app-name: appName
 	 * </pre>
@@ -69,6 +72,7 @@ public class SendMsg {
 
 	/**
 	 * Adds the following line to the message:
+	 * 
 	 * <pre>
 	 *   execute-app-arg: arg
 	 * </pre>
@@ -82,6 +86,7 @@ public class SendMsg {
 
 	/**
 	 * Adds the following line to the message:
+	 * 
 	 * <pre>
 	 *   loops: count
 	 * </pre>
@@ -95,6 +100,7 @@ public class SendMsg {
 
 	/**
 	 * Adds the following line to the message:
+	 * 
 	 * <pre>
 	 *   hangup-cause: cause
 	 * </pre>
@@ -108,6 +114,7 @@ public class SendMsg {
 
 	/**
 	 * Adds the following line to the message:
+	 * 
 	 * <pre>
 	 *   nomedia-uid: value
 	 * </pre>
@@ -121,9 +128,10 @@ public class SendMsg {
 
 	/**
 	 * Adds the following line to the message:
+	 * 
 	 * <pre>
 	 *    event-lock: true
-	 *  </pre>
+	 * </pre>
 	 */
 	public SendMsg addEventLock() {
 		msgLines.add("event-lock: true");
@@ -131,8 +139,9 @@ public class SendMsg {
 	}
 
 	/**
-	 * A generic method to add a message line. The constructed line in the sent message will be in the
-	 * form:
+	 * A generic method to add a message line. The constructed line in the sent
+	 * message will be in the form:
+	 * 
 	 * <pre>
 	 *   name: value
 	 * </pre>
@@ -165,15 +174,14 @@ public class SendMsg {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder("SendMsg: ");
-		if (msgLines.size() > 1) {
-			sb.append(msgLines.get(1));
-		} else if (msgLines.size() > 0) {
-			sb.append(0);
-		}
-
-		return sb.toString();
+		return msgLines.toString();
+		// StringBuilder sb = new StringBuilder("SendMsg: ");
+		// if (msgLines.size() > 1) {
+		// sb.append(msgLines.get(1));
+		// } else if (msgLines.size() > 0) {
+		// sb.append(0);
+		// }
+		// return sb.toString();
 	}
-
 
 }

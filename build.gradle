@@ -32,7 +32,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId 'org.freeswitch.esl.client'
             artifactId 'esl-client'
-            version '0.10.4'
+            version '0.10.5'
 
             from components.java
             // more goes in here
