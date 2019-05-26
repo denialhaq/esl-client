@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.freeswitch.esl.client'
-version = '0.10.3'
+version = '0.10.5-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.netty:netty-all:4.1.17.Final'
+    compile 'io.netty:netty-all:4.1.36.Final'
     compile 'com.google.guava:guava:23.4-jre'
     compile 'org.slf4j:slf4j-api:1.7.25'
     runtime 'ch.qos.logback:logback-classic:1.2.3'
@@ -32,7 +32,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId 'org.freeswitch.esl.client'
             artifactId 'esl-client'
-            version '0.10.5'
+//            version '0.10.5'
 
             from components.java
             // more goes in here
