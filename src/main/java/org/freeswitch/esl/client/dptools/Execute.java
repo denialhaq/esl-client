@@ -11,10 +11,16 @@ public class Execute {
 
     IModEslApi api;
     String _uuid;
+    Boolean event_lock = false;
 
     public Execute(IModEslApi api, String uuid) {
         this.api = api;
         this._uuid = uuid;
+    }
+
+
+    public void setEventLock(Boolean _event_lock) {
+        this.event_lock = _event_lock;
     }
 
     /**
@@ -1696,6 +1702,8 @@ public class Execute {
         msg.addExecuteAppName(app);
         if (nn(args))
             msg.addExecuteAppArg(args);
+        if(event_lock)
+            msg.addEventLock();
         CommandResponse resp = api.sendMessage(msg);
         if (!resp.isOk())
             throw new ExecuteException(resp.getReplyText());
