@@ -20,6 +20,7 @@ public class OutboundTest {
     private static String sb = "/usr/local/freeswitch/sounds/en/us/callie/ivr/8000/";
     String prompt = sb + "ivr-please_enter_extension_followed_by_pound.wav";
     String failed = sb + "ivr-that_was_an_invalid_entry.wav";
+
     public static void main(String[] args) {
         new OutboundTest();
     }
@@ -27,20 +28,15 @@ public class OutboundTest {
     public OutboundTest() {
         try {
 
-            final Client inboudClient = new Client();
-            inboudClient.connect(new InetSocketAddress("localhost", 8021), "ClueCon", 10);
-            inboudClient.addEventListener((ctx, event) -> logger.info("INBOUND onEslEvent: {}", event.getEventName()));
-
             final SocketClient outboundServer = new SocketClient(
-                    new InetSocketAddress("localhost", 8084),
+                    new InetSocketAddress("0.0.0.0", 8084),
                     () -> new IClientHandler() {
                         @Override
                         public void onConnect(Context context,
-                                EslEvent eslEvent) {
+                                              EslEvent eslEvent) {
 
 
-                            logger.warn(nameMapToString(eslEvent
-                                    .getMessageHeaders(), eslEvent.getEventBodyLines()));
+                            logger.warn(nameMapToString(eslEvent));
 
                             String uuid = eslEvent.getEventHeaders()
                                     .get("unique-id");
@@ -53,13 +49,16 @@ public class OutboundTest {
 
                             try {
 
-                                exe.answer();
+                                logger.warn("Answering for uuid {}", uuid);
 
-                                String digits = exe.playAndGetDigits(3,
-                                        5, 10, 10 * 1000, "#", prompt,
-                                        failed, "^\\d+", 10 * 1000);
-                                logger.warn("Digits collected: {}",
-                                        digits);
+                                exe.answer();
+                                exe.echo();
+
+//                                String digits = exe.playAndGetDigits(3,
+//                                        5, 10, 10 * 1000, "#", prompt,
+//                                        failed, "^\\d+", 10 * 1000);
+//                                logger.warn("Digits collected: {}",
+//                                        digits);
 
 
                             } catch (ExecuteException e) {
@@ -93,20 +92,28 @@ public class OutboundTest {
         }
     }
 
-    public static String nameMapToString(Map<Name, String> map,
-            List<String> lines) {
+    public static String nameMapToString(EslEvent eslEvent) {
         StringBuilder sb = new StringBuilder("\nHeaders:\n");
-        for (Name key : map.keySet()) {
-            if(key == null)
-                continue;
-            sb.append(key.toString());
-            sb.append("\n\t\t\t\t = \t ");
-            sb.append(map.get(key));
+
+        eslEvent.getMessageHeaders().forEach((k, v) -> {
+            if (k != null) {
+                sb.append(k.toString());
+                sb.append("\t\t\t = \t ");
+                sb.append(v);
+                sb.append("\n");
+            }
+        });
+
+        eslEvent.getEventHeaders().forEach( (k,v) -> {
+            sb.append(k);
+            sb.append("\t\t\t = \t ");
+            sb.append(v);
             sb.append("\n");
-        }
-        if (lines != null) {
+        });
+
+        if (eslEvent.getEventBodyLines() != null && eslEvent.getEventBodyLines().size() > 0) {
             sb.append("Body Lines:\n");
-            for (String line : lines) {
+            for (String line : eslEvent.getEventBodyLines()) {
                 sb.append(line);
                 sb.append("\n");
             }
