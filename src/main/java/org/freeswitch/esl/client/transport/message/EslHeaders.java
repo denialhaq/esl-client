@@ -105,6 +105,10 @@ public class EslHeaders {
 		 */
 		public static final String TEXT_EVENT_PLAIN = "text/event-plain";
 		/**
+		 * {@code "text/event-json"}
+		 */
+		public static final String TEXT_EVENT_JSON = "text/event-json";
+		/**
 		 * {@code "text/event-xml"}
 		 */
 		public static final String TEXT_EVENT_XML = "text/event-xml";

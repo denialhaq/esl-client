@@ -15,6 +15,9 @@
  */
 package org.freeswitch.esl.client.transport.event;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.freeswitch.esl.client.decoders.JsonDecoder;
 import org.freeswitch.esl.client.transport.HeaderParser;
 import org.freeswitch.esl.client.transport.message.EslHeaders;
 import org.freeswitch.esl.client.transport.message.EslHeaders.Name;
@@ -59,6 +62,13 @@ public class EslEvent {
 
 	public EslEvent(EslMessage rawMessage) {
 		this(rawMessage, false);
+	}
+
+	public EslEvent(JsonNode jsonMessage){
+		messageHeaders = new HashMap<>();
+		eventHeaders = new HashMap<>();
+		eventBody = new ArrayList<>();
+		parseJsonBody(jsonMessage);
 	}
 
 	public EslEvent(EslMessage rawMessage, boolean parseCommandReply) {
@@ -184,7 +194,20 @@ public class EslEvent {
 				}
 			}
 		}
+	}
 
+	private void parseJsonBody(final JsonNode jsonMessage) {
+		ObjectMapper mapper = JsonDecoder.getInstance().getObjectMapper();
+		Map<String, Object> treeMap = mapper.convertValue(jsonMessage, Map.class);
+		messageHeaders.put(Name.CONTENT_TYPE, Value.TEXT_EVENT_JSON);
+		treeMap.forEach((key,value) -> {
+			/*
+			Name headerName = Name.fromLiteral(key);
+			if(headerName != null)
+				messageHeaders.put(headerName, value.toString());
+			*/
+			eventHeaders.put(key, value.toString());
+		});
 	}
 
 	@Override
