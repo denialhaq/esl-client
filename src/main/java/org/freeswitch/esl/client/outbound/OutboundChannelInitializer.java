@@ -4,6 +4,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.EventExecutorGroup;
 import org.freeswitch.esl.client.transport.message.EslFrameDecoder;
@@ -29,6 +30,8 @@ public class OutboundChannelInitializer extends ChannelInitializer<SocketChannel
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
+        // add idle state handler
+        pipeline.addLast("idleStateHandler",new IdleStateHandler(0,0,25));
         // Add the text line codec combination first
         pipeline.addLast("encoder", new StringEncoder());
         // Note that outbound mode requires the decoder to treat many 'headers' as body lines
