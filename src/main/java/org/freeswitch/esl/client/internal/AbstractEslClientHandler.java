@@ -80,7 +80,16 @@ public abstract class AbstractEslClientHandler extends SimpleChannelInboundHandl
 
 		ctx.close();
 
-		ctx.fireExceptionCaught(e);
+        if (e instanceof java.io.IOException                            ||  // Connection reset by peer, Broken pipe
+            e instanceof java.nio.channels.ClosedChannelException       ||
+            e instanceof io.netty.handler.codec.DecoderException        ||
+            e instanceof io.netty.handler.codec.CorruptedFrameException ||  // Bad WebSocket frame
+            e instanceof java.lang.IllegalArgumentException             ||  // Use https://... URL to connect to HTTP server
+            e instanceof javax.net.ssl.SSLException                     ||  // Use http://... URL to connect to HTTPS server
+            e instanceof io.netty.handler.ssl.NotSslRecordException )
+            log.debug("Caught Exception", e);  // Maybe client is bad
+		else
+			ctx.fireExceptionCaught(e);  // Maybe server is bad
 
 	}
 
