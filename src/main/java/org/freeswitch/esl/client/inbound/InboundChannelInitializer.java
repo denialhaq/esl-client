@@ -5,6 +5,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.freeswitch.esl.client.transport.message.EslFrameDecoder;
 
 /**
@@ -24,6 +25,7 @@ class InboundChannelInitializer extends ChannelInitializer<SocketChannel> {
     public void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast("decoder", new EslFrameDecoder(8192));
+        pipeline.addLast("writeTimeoutHandler", new WriteTimeoutHandler(30));
 
         // now the inbound client logic
         pipeline.addLast("clientHandler", handler);

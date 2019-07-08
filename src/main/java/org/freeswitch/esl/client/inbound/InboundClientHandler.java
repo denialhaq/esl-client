@@ -16,6 +16,7 @@
 package org.freeswitch.esl.client.inbound;
 
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.timeout.WriteTimeoutException;
 import org.freeswitch.esl.client.internal.AbstractEslClientHandler;
 import org.freeswitch.esl.client.internal.Context;
 import org.freeswitch.esl.client.transport.CommandResponse;
@@ -85,8 +86,19 @@ class InboundClientHandler extends AbstractEslClientHandler {
 
     @Override 
     public void channelInactive(ChannelHandlerContext ctx) throws Exception { 
-        log.debug("Received channelInactive notice");
+        log.error("Received channelInactive notice");
 		listener.disconnected();
-    } 
+    }
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+			throws Exception {
+		if (cause instanceof WriteTimeoutException) {
+			log.error("InboundClientHandler WriteTimeoutException Occurred.");
+			listener.disconnected();
+		} else {
+			super.exceptionCaught(ctx, cause);
+		}
+	}
 
 }

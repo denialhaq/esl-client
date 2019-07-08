@@ -17,10 +17,7 @@ package org.freeswitch.esl.client.inbound;
 
 import com.google.common.base.Throwables;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.freeswitch.esl.client.internal.Context;
@@ -127,6 +124,13 @@ public class Client implements IModEslApi {
 		}
 		// Did not timeout
 		final Channel channel = future.channel();
+
+		channel.closeFuture().addListener((ChannelFutureListener) channelFuture -> {
+			log.warn("Connection closed connect to [{}]", clientAddress);
+			clientContext = Optional.empty();
+		});
+
+
 		// But may have failed anyway
 		if (!future.isSuccess()) {
 			log.warn("Failed to connect to [{}]", clientAddress, future.cause());
@@ -379,6 +383,7 @@ public class Client implements IModEslApi {
 		@Override
 		public void disconnected() {
 			log.info("Disconnected ...");
+			clientContext = Optional.empty();
 			if (null != connectionListener)
 				try {
 					connectionListener.ondisconnected();
