@@ -2,16 +2,13 @@
 esl-client
 ==============================================================================
 
-[![Travis](https://img.shields.io/travis/mgodave/esl-client.svg)](https://travis-ci.org/mgodave/esl-client)
-[![Maven Central](https://img.shields.io/maven-central/v/org.freeswitch.esl.client/org.freeswitch.esl.client.svg)](http://search.maven.org/#artifactdetails%7Corg.freeswitch.esl.client%7Corg.freeswitch.esl.client%7C0.9.2%7Cbundle)
-
 **esl-client** is a Java-based Event Socket Library for the
 [FreeSWITCH](https://freeswitch.org/) project.
 
 This project is a fork of the unmaintained, original project at
 <https://freeswitch.org/stash/projects/FS/repos/freeswitch-contrib/browse/dvarnes/java/esl-client>
 
-Status: In Progress...
+This fork adds in fixes for the memory leaks/outbound esl capabilities. In case you face issues, please raise an issue.
 
 
 Example
@@ -84,6 +81,7 @@ Authors
 - [Dave Rusek](mailto:dave.rusek@readytalk.com)
 - [David Varnes](mailto:david.varnes@gmail.com) (original author)
 - [Tobias Bieniek](https://github.com/Turbo87)
+- [Kinshuk](https://github.com/kingster)
 
 License
 ------------------------------------------------------------------------------
