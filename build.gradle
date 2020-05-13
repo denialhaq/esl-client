@@ -24,7 +24,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.30'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9'
     runtime 'ch.qos.logback:logback-classic:1.2.3'
-    testCompile 'junit:junit:4.8.1'
+    testCompile 'junit:junit:4.13'
 }
 
 
