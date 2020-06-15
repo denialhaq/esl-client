@@ -5,16 +5,13 @@ plugins {
 }
 
 group = 'org.freeswitch.esl.client'
-version = '0.10.5-SNAPSHOT'
+version = '0.10.6'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
     mavenLocal()
-    maven {
-        url "http://10.0.10.204:8081/nexus/content/groups/public"
-    }
     mavenCentral()
 }
 
