@@ -2,6 +2,9 @@
 esl-client
 ==============================================================================
 
+![Build Status](https://travis-ci.com/voiceip/esl-client.svg?branch=master)
+
+
 **esl-client** is a Java-based Event Socket Library for the
 [FreeSWITCH](https://freeswitch.org/) project.
 
