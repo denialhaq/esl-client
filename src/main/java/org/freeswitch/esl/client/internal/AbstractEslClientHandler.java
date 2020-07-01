@@ -18,6 +18,8 @@ package org.freeswitch.esl.client.internal;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.freeswitch.esl.client.transport.event.EslEvent;
 import org.freeswitch.esl.client.transport.event.EslEventHeaderNames;
 import org.freeswitch.esl.client.transport.message.EslHeaders.Name;
@@ -225,21 +227,49 @@ public abstract class AbstractEslClientHandler extends SimpleChannelInboundHandl
 	 * @param command
 	 * @return Job-UUID as a string
 	 */
-	public CompletableFuture<EslEvent> sendBackgroundApiCommand(Channel channel, final String command) {
-
+	public CompletableFuture<String> sendBackgroundApiJobCommand(Channel channel, final String command) {
 		return sendApiSingleLineCommand(channel, command)
 				.thenComposeAsync(result -> {
 					if (result.hasHeader(Name.JOB_UUID)) {
 						final String jobId = result.getHeaderValue(Name.JOB_UUID);
-						final CompletableFuture<EslEvent> resultFuture = new CompletableFuture<>();
-						backgroundJobs.put(jobId, resultFuture);
-						return resultFuture;
+						return CompletableFuture.completedFuture(jobId);
 					} else {
-						final CompletableFuture<EslEvent> resultFuture = new CompletableFuture<>();
+						final CompletableFuture<String> resultFuture = new CompletableFuture<>();
 						resultFuture.completeExceptionally(new IllegalStateException("Missing Job-UUID header in bgapi response"));
 						return resultFuture;
 					}
 				}, backgroundJobExecutor);
+	}
+
+
+	/**
+	 * Returns the EslEvent of that the response event will have.
+	 *
+	 * @param channel
+	 * @param command
+	 * @return EslEvent
+	 */
+	public CompletableFuture<EslEvent> sendBackgroundApiCommand(Channel channel, final String command) {
+		return sendBackgroundApiJobCommand(channel, command).thenComposeAsync(jobId -> {
+			final CompletableFuture<EslEvent> resultFuture = new CompletableFuture<>();
+			backgroundJobs.put(jobId, resultFuture);
+			return resultFuture;
+		});
+	}
+
+	/**
+	 * @Experimental Interface
+	 * @param channel
+	 * @param command
+	 * @return Future<Pair<JobID,Future<EslEvent>>>
+	 */
+	@Deprecated
+	public CompletableFuture<Pair<String,CompletableFuture<EslEvent>>> sendBackgroundApiCommandWResponse(Channel channel, final String command) {
+		return sendBackgroundApiJobCommand(channel, command).thenComposeAsync(jobId -> {
+			final CompletableFuture<EslEvent> resultFuture = new CompletableFuture<>();
+			backgroundJobs.put(jobId, resultFuture);
+			return CompletableFuture.completedFuture((new ImmutablePair<>(jobId,resultFuture)));
+		});
 	}
 
 	protected abstract void handleEslEvent(ChannelHandlerContext ctx, EslEvent event);

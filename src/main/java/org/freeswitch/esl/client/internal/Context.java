@@ -112,6 +112,34 @@ public class Context implements IModEslApi {
 		return handler.sendBackgroundApiCommand(channel, sb.toString());
 	}
 
+
+	/**
+	 * Submit a FreeSWITCH API command to the server to be executed in background
+	 * mode. A synchronous response from the server provides a UUID to identify the
+	 * job execution results. When the server has completed the job execution it
+	 * fires a BACKGROUND_JOB Event with the execution results.
+	 * <p/>
+	 * Note that this Client must be subscribed in the normal way to BACKGROUND_JOB
+	 * Events, in order to receive this event.
+	 *
+	 * @param command API command to send
+	 * @param arg     command arguments
+	 * @return String Job-UUID that the server will tag result event with.
+	 */
+	@Override
+	public CompletableFuture<String> sendBackgroundApiJobCommand(String command, String arg) {
+
+		checkArgument(!isNullOrEmpty(command), "command cannot be null or empty");
+
+		final StringBuilder sb = new StringBuilder();
+		sb.append("bgapi ").append(command);
+		if (!isNullOrEmpty(arg)) {
+			sb.append(' ').append(arg);
+		}
+
+		return handler.sendBackgroundApiJobCommand(channel, sb.toString());
+	}
+
 	/**
 	 * Set the current event subscription for this connection to the server.
 	 * Examples of the events argument are:

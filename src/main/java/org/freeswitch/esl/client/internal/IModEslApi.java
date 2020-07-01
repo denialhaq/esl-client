@@ -50,6 +50,10 @@ public interface IModEslApi {
 
 	CompletableFuture<EslEvent> sendBackgroundApiCommand(String command, String arg);
 
+	CompletableFuture<String> sendBackgroundApiJobCommand(String command, String arg);
+
+	//Pair<CompletableFuture<String>, CompletableFuture<EslEvent>> sendBackgroundApiJobCommandWithResponse(String command, String arg);
+
 	CommandResponse setEventSubscriptions(EventFormat format, String events);
 
 	CommandResponse setEventNoSubscriptions(String events);
