@@ -17,8 +17,12 @@ import java.util.Map;
 
 public class OutboundTest {
     private static Logger logger = LoggerFactory.getLogger(OutboundTest.class);
-    private static String sb = "/usr/local/freeswitch/sounds/en/us/callie/ivr/8000/";
-    String prompt = sb + "ivr-please_enter_extension_followed_by_pound.wav";
+    //fusionpbx
+//    private static String sb = "/usr/share/freeswitch/sounds/en/us/callie/ivr/8000/";
+    //source freeswitch
+private static String sb = "/usr/local/freeswitch/sounds/en/us/callie/ivr/8000/";
+//    String prompt = sb + "ivr-please_enter_extension_followed_by_pound.wav";
+    String prompt = sb + "ivr-welcome_to_freeswitch.wav";
     String failed = sb + "ivr-that_was_an_invalid_entry.wav";
 
     public static void main(String[] args) {
@@ -39,7 +43,7 @@ public class OutboundTest {
                             logger.warn(nameMapToString(eslEvent));
 
                             String uuid = eslEvent.getEventHeaders()
-                                    .get("unique-id");
+                                    .get("Unique-ID");
 
                             logger.warn(
                                     "Creating execute app for uuid {}",
@@ -52,8 +56,13 @@ public class OutboundTest {
                                 logger.warn("Answering for uuid {}", uuid);
 
                                 exe.answer();
-                                exe.echo();
+                                exe.playback(prompt);
+//                                exe.echo();
+//                                exe.transfer("1002", "XML", "192.168.1.106");
+                                exe.recordSession("/tmp/myfile.wav");
+                                exe.bridge("user/1002");
 
+                                exe.ApiCommand("uuid_transfer", uuid + " -both 1002 XML 192.168.1.106");
 //                                String digits = exe.playAndGetDigits(3,
 //                                        5, 10, 10 * 1000, "#", prompt,
 //                                        failed, "^\\d+", 10 * 1000);

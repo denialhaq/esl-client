@@ -1,14 +1,17 @@
 plugins {
   id 'java'
-  id 'maven'
+//  id 'maven'
   id 'maven-publish'
+    id 'org.springframework.boot' version '2.0.4.RELEASE'
 }
+
+apply plugin: 'io.spring.dependency-management'
 
 group = 'org.freeswitch.esl.client'
 version = '0.10.6'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
     mavenLocal()
@@ -16,14 +19,18 @@ repositories {
 }
 
 dependencies {
-    compile 'io.netty:netty-all:4.1.53.Final'
-    compile 'com.google.guava:guava:23.4-jre'
-    compile 'org.slf4j:slf4j-api:1.7.30'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.1'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
-    runtime 'ch.qos.logback:logback-classic:1.2.3'
-    testCompile 'junit:junit:4.13.2'
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat:2.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'io.netty:netty-all:4.1.53.Final'
+    implementation 'com.google.guava:guava:23.4-jre'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+//    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.1'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+//    runtime 'ch.qos.logback:logback-classic:1.2.3'
+//    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
 
 
 publishing {
