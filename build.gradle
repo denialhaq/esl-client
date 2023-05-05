@@ -19,7 +19,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-tomcat:2.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat:3.0.6'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'io.netty:netty-all:4.1.53.Final'
     implementation 'com.google.guava:guava:23.4-jre'
