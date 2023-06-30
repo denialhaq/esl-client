@@ -22,7 +22,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-tomcat:2.7.0'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'io.netty:netty-all:4.1.53.Final'
-    implementation 'com.google.guava:guava:23.4-jre'
+    implementation 'com.google.guava:guava:32.1.1-jre'
     implementation 'org.slf4j:slf4j-api:1.7.30'
 //    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.1'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
